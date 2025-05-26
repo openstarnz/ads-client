@@ -53,3 +53,65 @@ impl PlcString16 {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn convert_16_character_string() {
+        let input_string = String::from("Status: Healthy!");
+
+        let plc_string = PlcString16::try_from(input_string.clone())
+            .expect("Unexpected: could not get plc string from valid string");
+
+        let output_string: String = plc_string.into();
+
+        assert_eq!(input_string, output_string);
+    }
+
+    #[test]
+    fn convert_15_character_string() {
+        let input_string = String::from("Status: Healthy");
+
+        let plc_string = PlcString16::try_from(input_string.clone())
+            .expect("Unexpected: could not get plc string from valid string");
+
+        let output_string: String = plc_string.into();
+
+        assert_eq!(input_string, output_string);
+    }
+
+    #[test]
+    fn convert_17_character_string() {
+        let input_string = String::from("Status: Healthy!!");
+
+        let plc_string_result = PlcString16::try_from(input_string.clone());
+
+        assert!(plc_string_result.is_err());
+    }
+
+    #[test]
+    fn convert_empty_string() {
+        let input_string = String::new();
+
+        let plc_string = PlcString16::try_from(input_string.clone())
+            .expect("Unexpected: could not get plc string from valid string");
+
+        let output_string: String = plc_string.into();
+
+        assert_eq!(input_string, output_string);
+    }
+
+    #[test]
+    fn convert_string_with_internal_null_characters() {
+        let input_string = String::from("Status:\0\0Healthy");
+
+        let plc_string = PlcString16::try_from(input_string.clone())
+            .expect("Unexpected: could not get plc string from valid string");
+
+        let output_string: String = plc_string.into();
+
+        assert_eq!(input_string, output_string);
+    }
+}
