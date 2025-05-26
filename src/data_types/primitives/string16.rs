@@ -35,7 +35,12 @@ impl TryFrom<String> for PlcString16 {
 
 impl From<PlcString16> for String {
     fn from(val: PlcString16) -> Self {
-        val.inner.into_iter().map(|c| c as char).collect()
+        val.inner
+            .into_iter()
+            .map(|c| c as char)
+            .collect::<String>()
+            .trim_end_matches("\0")
+            .into()
     }
 }
 
