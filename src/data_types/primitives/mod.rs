@@ -3,6 +3,7 @@ pub mod dint;
 pub mod int;
 pub mod lreal;
 pub mod real;
+pub mod string16;
 pub mod time;
 pub mod time_struct;
 pub mod udint;
